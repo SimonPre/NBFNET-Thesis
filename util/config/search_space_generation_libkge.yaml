@@ -1,0 +1,20 @@
+job.type: search
+search.type: ax
+dataset.name: fb15k-237
+
+ax_search:
+  num_trials: 20
+  num_sobol_trials: 20
+  parameters:
+    - name: user.batch_size
+      type: choice
+      values: [32, 64, 128]
+    - name: user.learning_rate
+      type: range
+      bounds: [0.0005, 0.05]
+    - name: user.temperature
+      type: range
+      bounds: [0.0, 2.0]
+    - name: user.negative_samples
+      type: choice
+      values: [ 32, 64, 128 ]

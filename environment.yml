@@ -1,0 +1,23 @@
+name: Thesis
+channels:
+  - conda-forge
+  - defaults
+  - nvidia
+dependencies:
+  - python=3.10
+  - pip
+  - pandas==1.5.2
+  - jaxlib=*=*cuda*
+  - jax==0.4.1
+  - cuda-nvcc
+  - pydantic=1.10.2
+  - python-dotenv=0.21.0
+  - pip:
+      - OmegaConf==2.2.3
+      - dacite==1.6.0
+      - firebase_admin==6.0.1
+      - python-dotenv==0.21.0
+      - flax==0.6.3
+      - jraph==0.0.6.dev0
+
+

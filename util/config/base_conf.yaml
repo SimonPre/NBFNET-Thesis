@@ -1,0 +1,48 @@
+run:
+  save_results: False # Whether the results of evaluation and test are saved to the DB, or printed, if falls still needs db access.
+  seed: 0 # seed used for random number generation
+  data:
+    dataset: "wnrr" # name of the dataset in the data/datasets folder
+    testing_filter: ~ # only interesting for debugging, filters out all entities with a smaller index than provided
+    remove_easy_edges: True # flag indicating of so pairs are removed from the graph during training, if false only the training examples are removed
+    negative_sampling:
+      n_negative_samples: 32 # number of negative filters per positive
+      filter: True # flag if the random negative examples are filtered or not
+  training:
+    batch_size: 256
+    mini_batch_size: 32 # size of mini-batches created to emulate data parallel training. High impact on memory!
+    n_epochs: 20 # number of epochs
+    adversarial_temperature: 0.5 # temperature parameter in self-adversarial sampling
+    add_self_edges: False # flag to add traditional self-edges to the model, i.e. COMBINE function = aggregation function
+    scoring:
+      dimensionalities: [64, 1] # output dimensionality of each layer in the MLP used for scoring
+      activation_function: "relu" # activation function used in the scoring mlp
+      type: "o" # if set to "so" or "o" MLP is used for scoring and either the representations of "o" or so are supplied to the scoring MLP.
+      # can also be set to "transe", "rotate" and distmult. In this case no MLP is used, please make sure the augment_with_query_embedding parameter is set to true.
+      augment_with_query_embedding: True # If set to ture p is concatenated to the input of the MLP scpring function
+    message_passing:
+      message_augmentation: True # use message augmentation
+      indicator_function_as_bounding: True # indicator of all non-s entities are initalized uniformly
+      initial_s_dependent_on_p: True # initalize s dependent on p or not
+      learned_zero_vector: False # indicator if a learned zero vector is used, if set to false and indicator_function_as_bounding the all zero vector is used.
+      query_dependent_edge_representations: True # flag fro query dependent edge representations
+      new_representation_based_only_on_update: False # use the combine function or obtain new node representations independent of those at l-1
+      aggregation_function: "pna" # can be pna, mean, max or sum
+      messanger_function: "distmult" # can be distmult, transe, and rotate
+      query_embedding_dimensionality: 32 # paramter used to specify the dimensionality of the relation and entity representations
+      edge_representation_dimensionalities: [32, 32, 32, 32, 32, 32] # needs to be the same as query_embedding_dimensionality. Controls how many layers of message passing are conducted
+      activation_function: "relu" # name of the activation function used in message passing
+      layer_normalization: True
+      skip_connection: True
+    optimizer:
+      optimizer: "adam" # name of the optimizer
+      learning_rate: 5e-3 #
+      other_arguments_kwargs: ~ # expects a dictionary, but never tested no guarantees!
+  evaluation:
+    ranking_scenario: "pessimistic" # no longer has an effect, legacy parameter
+    filter: True # flag if the evaluation and test metric computation is based on the filtered ranks
+    hits_at_N: [1,3,10] # computes hits at the given numbers
+
+
+
+
